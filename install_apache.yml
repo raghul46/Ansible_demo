@@ -1,0 +1,35 @@
+---
+- name: Install Apache and serve custom HTML on Ubuntu EC2
+  hosts: web_servers
+  become: yes
+
+  tasks:
+    - name: Update apt cache and install Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Apache
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Copy custom HTML file
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Welcome to My EC2 Server Served from Ansible!</title>
+              <style>
+                body { font-family: Arial; background-color: #f4f4f4; text-align: center; padding-top: 50px; }
+              </style>
+          </head>
+          <body>
+              <h1>Hello from Ansible!</h1>
+              <p>This page was deployed with Ansible :)</p>
+          </body>
+          </html>
